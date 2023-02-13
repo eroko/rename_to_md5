@@ -1,6 +1,7 @@
 import os
 import hashlib
 import time
+import filetype
 
 
 def list_files(directory_path):
@@ -12,10 +13,13 @@ def list_files(directory_path):
 def rename_to_md5(directory_path):
     for entry in os.scandir(directory_path):
         if entry.is_file():
-            print('Processing '+entry.path)
+            print('Processing ' + entry.path)
             md5_value = hashlib.md5(open(entry.path, 'rb').read()).hexdigest()
             file_name = entry.name.split('.')[0]
-            file_ext = entry.name.split('.')[1]
+            file_ext = filetype.guess_extension(open(entry.path, 'rb').read())
+            if file_ext is None:
+                print('Cannot guess file type!')
+                file_ext = 'UNKNOWN'
             if file_name == md5_value:
                 print('File name is already md5, CONTINUE')
                 continue
@@ -30,7 +34,6 @@ def rename_to_md5(directory_path):
                     print('Renamed')
         else:
             print('Not a file , PASS')
-
 
 
 if __name__ == '__main__':
