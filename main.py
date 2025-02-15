@@ -2,6 +2,11 @@ import os
 import hashlib
 import time
 import filetype
+import random
+import string
+
+def r_str(len):
+    return ''.join(random.sample(string.ascii_letters+string.digits,len))
 
 
 def list_files(directory_path):
@@ -25,9 +30,9 @@ def rename_to_md5(directory_path):
                 continue
             else:
                 if os.path.exists(directory_path + '/' + md5_value + '.' + file_ext):
-                    print('Already have a file with same md5, rename with unix timestamp')
+                    print('Already have a file with same md5, rename with Random Text')
                     unix13 = int(time.time())
-                    os.rename(entry.path, directory_path + '/' + md5_value + '_' + str(unix13) + '.' + file_ext)
+                    os.rename(entry.path, directory_path + '/' + md5_value + '_' + r_str(random.randint(1,10)) + '.' + file_ext)
                     print('Renamed')
                 else:
                     os.rename(entry.path, directory_path + '/' + md5_value + '.' + file_ext)
